@@ -1,4 +1,6 @@
 
+![Tweeter](Images/Tweeter%20Image.png)
+
 # Titan Electronic Sentiment Analysis
 
 ##  Project Overview
