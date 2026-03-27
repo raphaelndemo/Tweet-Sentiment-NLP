@@ -160,3 +160,19 @@ In this step, we specify the inputs and outputs for our NLP model:
 
 -Target (`y`): The output or label we want the model to predict.  
   For example, the sentiment class of each tweet (positive, negative, neutral).
+
+  ## Class Distribution Check - Key Points
+
+- Examine class distribution to identify imbalances before splitting the dataset.  
+- Imbalanced classes can bias model evaluation if randomly split.  
+- Apply **stratified sampling** during train/test split to preserve class proportions.  
+- **80/20 train/test split** used.  
+- **Fixed random state** ensures reproducibility.  
+
+**Class distribution (%):**
+
+| Sentiment Class                             | Percentage |
+|---------------------------------------------|------------|
+| No emotion toward brand or product          | 60.30%     |
+| Positive emotion                             | 33.31%     |
+| Negative emotion                             | 6.39%      |
