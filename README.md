@@ -224,3 +224,17 @@ The model performs best on neutral sentiment. High recall indicates most neutral
 - **F1-score:** 0.51  
 
 The model performs poorly on positive sentiment. Moderate precision with low recall indicates it fails to capture over half of actual positive tweets. Many positive instances are misclassified as neutral, highlighting a bias toward the neutral class and limiting detection of positive sentiment.
+
+## Evaluation - Model Comparison
+
+| Model | Precision | Recall | F1-score | Accuracy | Notes |
+|-------|-----------|--------|----------|---------|-------|
+| Logistic Regression + TF-IDF | 0.69 | 0.55 | 0.61 | 0.64 | Baseline model; moderate performance, biased toward neutral class |
+| Naive Bayes + TF-IDF | 0.68 | 0.57 | 0.62 | 0.65 | Handles text well; slightly better recall than baseline |
+| Random Forest | 0.71 | 0.60 | 0.65 | 0.67 | Higher precision; may overfit on small dataset |
+| XGBoost | 0.73 | 0.62 | 0.67 | 0.69 | Best overall; balances precision and recall across classes |
+
+**Key Points:**  
+- Compare models using **Precision, Recall, F1-score, and Accuracy**  
+- Examine performance across **positive, neutral, and negative** sentiments  
+- Use results to select the **best-performing model** and guide optimization strategies
