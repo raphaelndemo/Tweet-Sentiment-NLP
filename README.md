@@ -161,7 +161,7 @@ In this step, we specify the inputs and outputs for our NLP model:
 -Target (`y`): The output or label we want the model to predict.  
   For example, the sentiment class of each tweet (positive, negative, neutral).
 
-  ## Class Distribution Check - Key Points
+  ## Class Distribution 
 
 - Examine class distribution to identify imbalances before splitting the dataset.  
 - Imbalanced classes can bias model evaluation if randomly split.  
@@ -176,3 +176,23 @@ In this step, we specify the inputs and outputs for our NLP model:
 | No emotion toward brand or product          | 60.30%     |
 | Positive emotion                             | 33.31%     |
 | Negative emotion                             | 6.39%      |
+
+
+## Modelling
+
+The goal of this section is to build and compare classification models that predict sentiment from tweet text. **Pipelines** are used to ensure there is **no data leakage** during preprocessing and modeling.
+
+We start with a **baseline model** and gradually introduce more complex models to improve performance.
+
+### TF-IDF
+
+- **TF (Term Frequency):** Counts how often each token appears in a tweet  
+- **IDF (Inverse Document Frequency):** Measures the importance of each word relative to the entire corpus  
+- TF-IDF converts raw text into **numerical feature vectors**, allowing models to understand which words are most relevant to the target.
+
+### Baseline Model: Logistic Regression + TF-IDF
+
+- **Why Logistic Regression:** Simple, interpretable, and effective for text classification  
+- **Role of TF-IDF:** Assigns weights to words, emphasizing important words and improving prediction accuracy  
+- Models cannot understand raw text—they only work with numbers; TF-IDF ensures meaningful numerical representation  
+- Without TF-IDF, all words are treated equally, which can reduce model performance
