@@ -56,7 +56,7 @@ This dataset contains tweets made by customers about **iPhone, Google, and Apple
 
 Understanding the dataset and its columns is crucial before any preprocessing or analysis.
 
----
+
 
 ## Dataset Columns
 
@@ -93,3 +93,46 @@ Understanding the dataset and its columns is crucial before any preprocessing or
 - Some tweets may mention multiple brands; check if the dataset handles this.  
 - Neutral tweets can be tricky, especially if sarcasm is present.  
 - Understanding the relationship between **tweet text**, **brand**, and **sentiment** is essential for any NLP task such as **sentiment analysis** or **brand-specific analysis**.
+
+
+# Data Observations and Cleaning
+
+We loaded the dataset `judge-1377884607_tweet_product_company.csv` and inspected its structure, shape, and data types.
+
+
+
+## Shape and Data Types
+- The dataset contains **9,093 rows** and **3 columns**:
+  1. **`tweet text`** – contents of the tweet.
+  2. **`emotion_in_tweet_is_directed_at`** – brand or product the tweet is about.
+  3. **`is_there_an_emotion_directed_at_a_brand_or_product`** – sentiment of the tweet: `positive`, `negative`, or `neutral`.
+
+
+
+## Missing Values
+- **`tweet text`**: 1 missing value → will be **dropped**.  
+- **`emotion_in_tweet_is_directed_at`**: 5,802 missing values (~64%) → will **not be dropped** because the brand/product information is optional and will not be used in modeling. Dropping over 60% would reduce dataset size and affect model training.  
+- **`is_there_an_emotion_directed_at_a_brand_or_product`**: No missing values.
+
+
+
+## Duplicates
+- The dataset contains **27 duplicate rows** → will be **dropped** to prevent the model from learning repetitive data.
+
+
+
+## Sentiment Labels
+- The `is_there_an_emotion_directed_at_a_brand_or_product` column contains:  
+  - `negative emotion`  
+  - `positive emotion`  
+  - `neutral emotion`  
+- One ambiguous label, `"I can't tell"`, will be **dropped** because it does not provide a clear sentiment and could introduce noise that reduces model performance.
+
+
+
+## Summary of Cleaning Steps
+1. Drop **1 missing tweet text** row.  
+2. Drop **27 duplicate rows**.  
+3. Drop ambiguous sentiment label `"I can't tell"`.  
+4. Keep `emotion_in_tweet_is_directed_at` column with missing values intact (optional metadata).  
+5. Dataset is now ready for preprocessing and model training.
