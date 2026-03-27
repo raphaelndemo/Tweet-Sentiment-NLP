@@ -144,8 +144,8 @@ Prepare tweets for NLP modeling using these steps:
 
 | Step | Description | Example |
 |------|-------------|---------|
-| ** Lemmatization** | Reduce words to their base form (lemma) | `studies` → `study` |
-| ** Lowercasing** | Convert all text to lowercase to improve consistency and simplify processing | `Cats` → `cats` |
-| ** Tokenization & Stopwords Removal** | Split sentences into words and remove common/irrelevant words | `"I love NLP"` → `["love", "NLP"]` |
-| ** Label Encoding** | Convert categorical labels (text) into numeric form | `["positive","negative"]` → `[0,1]` |
-| ** Stemming** | Remove suffixes to reduce words to their root | `cats` → `cat` |
+| Lemmatization | Reduce words to their base form (lemma) | `studies` → `study` |
+|  Lowercasing | Convert all text to lowercase to improve consistency and simplify processing | `Cats` → `cats` |
+|  Tokenization & Stopwords Removal** | Split sentences into words and remove common/irrelevant words | `"I love NLP"` → `["love", "NLP"]` |
+|  Label Encoding | Convert categorical labels (text) into numeric form | `["positive","negative"]` → `[0,1]` |
+|  Stemming | Remove suffixes to reduce words to their root | `cats` → `cat` |
