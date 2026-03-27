@@ -196,3 +196,31 @@ We start with a **baseline model** and gradually introduce more complex models t
 - **Role of TF-IDF:** Assigns weights to words, emphasizing important words and improving prediction accuracy  
 - Models cannot understand raw text—they only work with numbers; TF-IDF ensures meaningful numerical representation  
 - Without TF-IDF, all words are treated equally, which can reduce model performance
+
+
+## Interpretation of Model Performance
+
+### Negative Emotion
+- **Precision:** 0.75  
+- **Recall:** 0.05  
+- **F1-score:** 0.62  
+
+The model struggles with negative sentiment. While predictions labeled as negative are often correct (**high precision**), it rarely identifies negative cases (**very low recall**), causing most negative instances to be misclassified.
+
+
+
+### Neutral Emotion
+- **Precision:** 0.69  
+- **Recall:** 0.87  
+- **F1-score:** 0.77  
+
+The model performs best on neutral sentiment. High recall indicates most neutral tweets are correctly identified, but lower precision shows frequent misclassification of positive and negative tweets as neutral, suggesting a bias toward this class.
+
+
+
+### Positive Emotion
+- **Precision:** 0.62  
+- **Recall:** 0.44  
+- **F1-score:** 0.51  
+
+The model performs poorly on positive sentiment. Moderate precision with low recall indicates it fails to capture over half of actual positive tweets. Many positive instances are misclassified as neutral, highlighting a bias toward the neutral class and limiting detection of positive sentiment.
