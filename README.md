@@ -146,6 +146,17 @@ Prepare tweets for NLP modeling using these steps:
 |------|-------------|---------|
 | Lemmatization | Reduce words to their base form (lemma) | `studies` → `study` |
 |  Lowercasing | Convert all text to lowercase to improve consistency and simplify processing | `Cats` → `cats` |
-|  Tokenization & Stopwords Removal** | Split sentences into words and remove common/irrelevant words | `"I love NLP"` → `["love", "NLP"]` |
+|  Tokenization & Stopwords Removal | Split sentences into words and remove common/irrelevant words | `"I love NLP"` → `["love", "NLP"]` |
 |  Label Encoding | Convert categorical labels (text) into numeric form | `["positive","negative"]` → `[0,1]` |
 |  Stemming | Remove suffixes to reduce words to their root | `cats` → `cat` |
+
+
+## Defining Feature and Target Variables
+
+In this step, we specify the inputs and outputs for our NLP model:
+
+ Feature (`X`): The input data used for prediction.  
+  Typically, this is the preprocessed tweet text.
+
+-Target (`y`): The output or label we want the model to predict.  
+  For example, the sentiment class of each tweet (positive, negative, neutral).
