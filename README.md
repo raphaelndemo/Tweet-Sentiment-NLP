@@ -136,3 +136,16 @@ We loaded the dataset `judge-1377884607_tweet_product_company.csv` and inspected
 3. Drop ambiguous sentiment label `"I can't tell"`.  
 4. Keep `emotion_in_tweet_is_directed_at` column with missing values intact (optional metadata).  
 5. Dataset is now ready for preprocessing and model training.
+
+
+##  Data Preparation Steps
+
+Prepare tweets for NLP modeling using these steps:
+
+| Step | Description | Example |
+|------|-------------|---------|
+| ** Lemmatization** | Reduce words to their base form (lemma) | `studies` → `study` |
+| ** Lowercasing** | Convert all text to lowercase to improve consistency and simplify processing | `Cats` → `cats` |
+| ** Tokenization & Stopwords Removal** | Split sentences into words and remove common/irrelevant words | `"I love NLP"` → `["love", "NLP"]` |
+| ** Label Encoding** | Convert categorical labels (text) into numeric form | `["positive","negative"]` → `[0,1]` |
+| ** Stemming** | Remove suffixes to reduce words to their root | `cats` → `cat` |
