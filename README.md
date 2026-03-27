@@ -1,5 +1,3 @@
-# Tweet-Sentiment-NLP
-NLP Model for tweet sentiment classification
 
 # Titan Electronic Sentiment Analysis
 
