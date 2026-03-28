@@ -1,7 +1,0 @@
-streamlit
-scikit-learn
-pandas
-joblib
-transformers
-torch
-yfinance
