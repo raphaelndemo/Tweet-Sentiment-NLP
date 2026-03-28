@@ -283,3 +283,37 @@ The tweaked Logistic Regression model exhibits a more **balanced sensitivity acr
 - Persistent **class overlap**, especially between neutral and positive sentiments  
 - Reduced **precision in minority class predictions**  
 
+
+## Model Interpretation: Naive Bayes with TF-IDF
+
+### 1. Negative Emotion
+- **Precision:** 0.83  
+- **Recall:** 0.04  
+- **F1-score:** 0.04  
+
+The model achieves high precision but extremely low recall for negative sentiment. While predictions are accurate when made, it identifies only **5 out of 114** negative instances. This indicates the model is overly conservative and fails to capture most negative tweets.
+
+
+
+### 2. Neutral Emotion
+- **Precision:** 0.67  
+- **Recall:** 0.89  
+- **F1-score:** 0.77  
+
+The model performs best on the neutral class, with a strong F1-score of 0.77. It correctly identifies **951 out of 1074** neutral instances. However, precision is moderate due to misclassification of non-neutral tweets—particularly **368 positive** and **90 negative** tweets incorrectly labeled as neutral.
+
+
+
+### 3. Positive Emotion
+- **Precision:** 0.62  
+- **Recall:** 0.38  
+- **F1-score:** 0.47  
+
+The model shows moderate precision but low recall for positive sentiment, correctly identifying **226 out of 594** positive instances. A large number of positive tweets (**368**) are misclassified as neutral, suggesting difficulty distinguishing between positive and neutral sentiment.
+
+
+
+### Summary
+- The model is **biased toward predicting neutral sentiment**  
+- It **misses most negative cases** despite high precision  
+- It struggles to **differentiate positive from neutral**, leading to misclassification
