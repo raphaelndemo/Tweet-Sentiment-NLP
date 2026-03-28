@@ -238,3 +238,48 @@ The model performs poorly on positive sentiment. Moderate precision with low rec
 - Compare models using **Precision, Recall, F1-score, and Accuracy**  
 - Examine performance across **positive, neutral, and negative** sentiments  
 - Use results to select the **best-performing model** and guide optimization strategies
+
+
+##  Tweaked Logistic Regression — Performance Analysis
+
+###  Negative Emotion
+- **Precision:** 0.33  
+- **Recall:** 0.54  
+- **F1-score:** 0.41  
+
+The model demonstrates improved sensitivity to negative sentiment, achieving a recall of **0.54** with **62 out of 114** instances correctly identified. This indicates an enhanced ability to capture negative cases compared to the baseline.
+
+However, the relatively low precision (**0.33**) reflects a high rate of false positives, where non-negative instances are incorrectly classified as negative. Analysis of the confusion matrix further reveals a tendency toward **over-prediction of the negative class**, with misclassifications distributed across both neutral and positive categories.
+
+
+
+###  Neutral Emotion
+- **Precision:** 0.78  
+- **Recall:** 0.70  
+- **F1-score:** 0.73  
+
+The model achieves strong performance on the neutral class, maintaining a well-balanced trade-off between precision and recall. A total of **748 out of 1,074** neutral instances are correctly classified.
+
+Nevertheless, some degree of class overlap persists, particularly with positive sentiment, indicating that the model encounters difficulty in distinguishing **subtle semantic differences** between neutral and adjacent classes.
+
+
+
+###  Positive Emotion
+- **Precision:** 0.58  
+- **Recall:** 0.61  
+- **F1-score:** 0.59  
+
+Performance on the positive class is moderate, with **364 out of 594** instances correctly identified. While recall and precision are relatively balanced, the model exhibits notable misclassification into the neutral class.
+
+This suggests a limitation in effectively separating **positive sentiment from neutral expressions**, likely due to overlapping linguistic features.
+
+
+
+##  Overall Assessment
+
+The tweaked Logistic Regression model exhibits a more **balanced sensitivity across sentiment classes**, particularly improving recall for negative sentiment. However, this improvement introduces trade-offs:
+
+- Increased **false positive rate** for the negative class  
+- Persistent **class overlap**, especially between neutral and positive sentiments  
+- Reduced **precision in minority class predictions**  
+
