@@ -317,3 +317,34 @@ The model shows moderate precision but low recall for positive sentiment, correc
 - The model is **biased toward predicting neutral sentiment**  
 - It **misses most negative cases** despite high precision  
 - It struggles to **differentiate positive from neutral**, leading to misclassification
+
+## Trade-Off Analysis
+
+- **Baseline Logistic Regression (TF-IDF):**  
+  Performs poorly on negative sentiment with a recall of **0.05** and F1-score of **0.10**, indicating a strong bias toward the neutral class and minimal detection of negative tweets.
+
+- **Baseline Naive Bayes (TF-IDF):**  
+  Performs worse on negative sentiment, with a recall of **0.03** and F1-score of **0.05**. Despite high precision, it is largely ineffective at identifying negative feedback.
+
+- **Tweaked Logistic Regression (TF-IDF):**  
+  Shows the most improvement on negative sentiment, achieving a recall of **0.54** and F1-score of **0.41**. While it captures over half of negative cases, its lower precision (**0.33**) leads to more false positives.
+
+- **Tweaked Naive Bayes (TF-IDF):**  
+  Continues to underperform on negative sentiment with a recall of **0.04** and F1-score of **0.08**, remaining overly conservative and biased toward neutral predictions.
+
+**Key Insight:**  
+These results highlight a critical trade-off between **precision (operational efficiency)** and **recall (sensitivity to risk)**.
+
+
+## Final Recommendation
+
+### Tweaked Logistic Regression (TF-IDF)
+
+This model is recommended for deployment because:
+
+- It provides the best balance between **recall (0.54)** and **F1-score (0.41)** for negative sentiment detection.  
+- It significantly improves the identification of negative feedback compared to other models.  
+- It enables earlier detection of customer dissatisfaction, supporting proactive intervention.
+
+**Business Impact:**  
+Deploying this model will deliver the highest value to **Titan Electronic** by empowering teams across marketing, product, customer support, data analytics, public relations, sales, and management to address customer concerns before they escalate.
