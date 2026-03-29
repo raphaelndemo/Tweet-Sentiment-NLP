@@ -299,7 +299,6 @@ print(pred)
 ![Tweaked Regression Model](Images/tweaked%20regression%20model-improved%20logistic%20regression.png)
 
 
-
 ###  Negative Emotion
 - **Precision:** 0.33  
 - **Recall:** 0.54  
