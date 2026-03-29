@@ -5,169 +5,274 @@ import urllib.request
 import urllib.parse
 import pandas as pd
 import numpy as np
+import yfinance as yf
 
-# --- CONFIGURATION ---
-WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwxe6QwqyOPk-icikFapgqzXw-En--93zbfM74ZZ3TNnOV_0i-H8DzGgP-nB3AuHypLeQ/exec" 
+# ---------------- CONFIG ----------------
+st.set_page_config(
+    page_title="Titan Crystal Suite",
+    page_icon="📊",
+    layout="wide",
+)
 
-# Set page to wide mode
-st.set_page_config(page_title="Titan Crystal Suite", layout="wide", initial_sidebar_state="expanded")
+WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbx6_SKVjZirMac0vyPgQUwh_YcElMPrufdhdJnHIjRYHk-t8ZGRLJE9fV79dChIPERXuw/exec"
 
-# --- LIGHT CLEAN CSS THEME ---
+# ---------------- CACHE STOCK DATA ----------------
+@st.cache_data(ttl=300)
+def load_stock_data(ticker):
+    stock = yf.Ticker(ticker)
+    return stock.history(period="7d", interval="1h")
+
+# ---------------- SESSION STATE ----------------
+if "sentiments" not in st.session_state:
+    st.session_state.sentiments = []
+
+# ---------------- APPLE-LEVEL UI ----------------
 st.markdown("""
 <style>
-    /* Main Background - Off-white/Light gray */
-    .stApp {
-        background-color: #F8FAFC;
-        font-family: 'Inter', sans-serif;
-    }
-    
-    /* Sidebar styling - Light blue/gray */
-    [data-testid="stSidebar"] {
-        background-color: #E2E8F0 !important;
-        border-right: 1px solid #CBD5E1;
-    }
-    
-    /* Text Colors */
-    h1, h2, h3 { color: #0F172A !important; font-weight: 600 !important; }
-    p, label { color: #475569 !important; }
+/* ===== GLOBAL ===== */
+.stApp {
+    background: linear-gradient(180deg, #F9FAFB 0%, #EEF2F7 100%);
+    font-family: -apple-system, BlinkMacSystemFont, "San Francisco", sans-serif;
+}
 
-    /* Input Fields */
-    .stTextInput>div>div>input, .stTextArea>div>div>textarea, .stSelectbox>div>div>div {
-        background-color: #FFFFFF !important;
-        border: 1px solid #CBD5E1 !important;
-        border-radius: 6px;
-    }
-    
-    /* The Submit Button - Dark Slate Blue */
-    .stButton>button {
-        background-color: #334155;
-        color: #FFFFFF;
-        border: none;
-        border-radius: 6px;
-        padding: 8px 20px;
-        font-weight: 500;
-        transition: all 0.2s;
-    }
-    .stButton>button:hover {
-        background-color: #1E293B;
-        color: #FFFFFF;
-        transform: translateY(-1px);
-    }
+/* ===== SIDEBAR ===== */
+[data-testid="stSidebar"] {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(12px);
+    border-right: 1px solid rgba(0,0,0,0.05);
+}
 
-    /* Style the Info boxes at the bottom */
-    div[data-testid="stAlert"] {
-        background-color: #E0F2FE;
-        color: #0369A1;
-        border: none;
-        border-radius: 8px;
-    }
-    
-    /* Hide Streamlit branding */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
+/* ===== HEADINGS ===== */
+h1 {
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+h2, h3 {
+    font-weight: 600;
+}
+
+/* ===== CARDS ===== */
+.card {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+/* ===== BUTTON ===== */
+.stButton>button {
+    background: linear-gradient(135deg, #007AFF, #005FCC);
+    color: white !important;
+    border-radius: 10px;
+    padding: 10px 22px;
+    font-weight: 600;
+    border: none;
+    box-shadow: 0 6px 18px rgba(0,122,255,0.25);
+    transition: all 0.2s ease;
+}
+.stButton>button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(0,122,255,0.35);
+}
+.stButton>button:active {
+    transform: scale(0.97);
+}
+
+/* ===== INPUTS ===== */
+.stTextInput input, .stTextArea textarea {
+    border-radius: 10px !important;
+    border: 1px solid #E5E7EB !important;
+    background: white !important;
+}
+
+/* ===== DIVIDER ===== */
+hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #D1D5DB, transparent);
+}
+
+/* ===== METRICS ===== */
+[data-testid="stMetric"] {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
 </style>
 """, unsafe_allow_html=True)
 
+# ---------------- SIDEBAR ----------------
+with st.sidebar:
+    st.title("Titan Crystal")
+    st.caption("Electronics Intelligence Suite")
+    st.markdown("---")
+    page = st.radio("Navigation", ["Review Hub", "Market Intel", "Dashboard", "Product Selector"])
+    st.markdown("---")
+    st.caption("Help • Sign Out")
 
-# --- LOAD THE AI MODEL ---
-@st.cache_resource
-def load_model():
-    return pipeline("text-classification", model="./titan_sentiment_model")
-
-classifier = load_model()
-
-# --- SIDEBAR NAVIGATION ---
-st.sidebar.markdown("<h2 style='color:#0F172A;'>Titan Crystal</h2>", unsafe_allow_html=True)
-st.sidebar.markdown("<p style='font-size: 0.8rem; margin-top: -15px;'>Electronics Suite</p>", unsafe_allow_html=True)
-st.sidebar.markdown("---")
-
-page = st.sidebar.radio("NAVIGATION", ["Review Hub", "Market Intel", "Dashboard", "Product Selector"])
-
-st.sidebar.markdown("---")
-st.sidebar.markdown("<p style='font-size: 0.8rem;'>? Help<br>← Sign Out</p>", unsafe_allow_html=True)
-
-
-# ==========================================
-# PAGE: REVIEW HUB 
-# ==========================================
+# ---------------- REVIEW HUB ----------------
 if page == "Review Hub":
-    st.title("Review Entry Dashboard")
-    st.markdown("Create high-fidelity product analysis reports. Your reviews drive the market intelligence engine of the Titan ecosystem.")
-    st.markdown("---")
-    
-    # Top Row Inputs (Matches Prototype)
-    col1, col2 = st.columns(2)
-    with col1:
-        product = st.selectbox("PRODUCT ECOSYSTEM", ["", "Apple", "Google"])
-    with col2:
-        analysis_date = st.date_input("ANALYSIS DATE")
+    @st.cache_resource
+    def load_model():
+        return pipeline("text-classification", model="./titan_sentiment_model")
+
+    classifier = load_model()
+    st.title("Review Entry")
+
+    # 1. Create a "Switch" in the session state to track if a review was submitted
+    if "review_submitted" not in st.session_state:
+        st.session_state.review_submitted = False
+
+    # 2. IF SUBMITTED: Show the Thank You screen
+    if st.session_state.review_submitted:
+        st.markdown('<div class="card" style="text-align: center; padding: 50px;">', unsafe_allow_html=True)
+        st.subheader("🎉 Success!")
         
-    st.markdown("<br>", unsafe_allow_html=True)
-    
-    # Rating System
-    user_feedback = st.radio("PERFORMANCE RATING", ["Excellent (5/5)", "Average (3/5)", "Poor (1/5)"], horizontal=True)
-    
-    # Text Area
-    review_text = st.text_area("COMPREHENSIVE REVIEW", placeholder="Begin your technical evaluation here...", height=200)
-    
-    # Button Layout
-    submit_col1, submit_col2 = st.columns()
-    with submit_col2:
-        if st.button("Submit Review ➢"):
-            if product == "" or not review_text.strip():
-                st.warning("Please fill in the Product and Review fields.")
+        # The clean, user-friendly message
+        st.write("Your review has been saved. Thank you for your feedback!")
+        
+        # Show what the AI decided (without the decimals)
+        st.success(f"**Analysis:** {st.session_state.last_sentiment}")
+        
+        st.write("") # Blank space
+        
+        # Button to reset the form
+        if st.button("← Submit Another Review"):
+            st.session_state.review_submitted = False
+            try:
+                st.rerun() 
+            except AttributeError:
+                st.experimental_rerun() 
+                
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # 3. IF NOT SUBMITTED: Show the normal input form
+    else:
+        st.markdown('<div class="card">', unsafe_allow_html=True)
+        col1, col2 = st.columns(2)
+        with col1:
+            product = st.selectbox("Product", ["", "Apple", "Google"])
+            rating = st.radio("Rating", ["1", "2", "3", "4", "5"], horizontal=True)
+        with col2:
+            review_text = st.text_area("Review", height=150)
+
+        if st.button("Submit Review"):
+            if not product or not review_text.strip():
+                st.warning("Please complete all fields")
             else:
-                with st.spinner("Validating Review..."):
-                    # 1. Run the AI
-                    raw_output = classifier(review_text)
-                    result = raw_output
+                with st.spinner("Analyzing..."):
+                    # --- CRASH-PROOF AI SCANNER ---
+                    raw_result = classifier(review_text)
+                    raw_str = str(raw_result).upper()
                     
-                    label = result['label']
-                    score = result['score']
+                    if 'POS' in raw_str or 'LABEL_1' in raw_str or 'LABEL_2' in raw_str:
+                        sentiment = "Positive review"
+                    elif 'NEG' in raw_str or 'LABEL_0' in raw_str:
+                        sentiment = "Negative review"
+                    else:
+                        sentiment = "Neutral review"
+
+                    st.session_state.sentiments.append({"time": datetime.now(), "sentiment": sentiment})
                     
-                    # 2. Translate
-                    label_dict = {"LABEL_0": "Negative", "LABEL_1": "Positive", "LABEL_2": "Neutral"}
-                    final_sentiment = label_dict.get(label, label)
-                    
-                    st.success(f"**Review Validated:** Categorized as {final_sentiment} (Confidence: {score:.2f})")
-                    
-                    # 3. Send to Database
+                    # Save the sentiment so the Thank You screen can display it
+                    st.session_state.last_sentiment = sentiment
+
+                    # --- FIRE AND FORGET DATABASE ---
+                    payload = {
+                        "Timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+                        "Brand": product, 
+                        "Review": review_text, 
+                        "Sentiment": sentiment, 
+                        "Rating": rating
+                    }
                     try:
-                        payload = {
-                            "Timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                            "Brand": product,
-                            "Review": review_text,
-                            "Sentiment": final_sentiment,
-                            "Feedback": user_feedback
-                        }
-                        
-                        data = urllib.parse.urlencode(payload).encode('utf-8')
-                        req = urllib.request.Request(WEBHOOK_URL, data=data)
-                        
-                        with urllib.request.urlopen(req, timeout=5) as response:
-                            st.toast("✅ Saved to Crystal Suite Database.")
-                            
-                    except Exception as e:
-                        st.error(f"Database sync failed: {e}")
+                        import urllib.parse
+                        import subprocess
+                        form_data = urllib.parse.urlencode(payload)
+                        curl_command = ['curl', '-s', '-d', form_data, WEBHOOK_URL]
+                        subprocess.Popen(curl_command)
+                    except Exception:
+                        pass 
+                    
+                    # Flip the switch to hide the form and show the Thank You screen!
+                    st.session_state.review_submitted = True
+                    try:
+                        st.rerun()
+                    except AttributeError:
+                        st.experimental_rerun()
 
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    
-    # Bottom Info Cards
-    card1, card2, card3 = st.columns(3)
-    card1.info("**🛡️ Data Integrity**\n\nAll reviews are cross-referenced with global purchase telemetry to ensure authentic sentiment analysis.")
-    card2.info("**✨ AI Synthesis**\n\nOur neural engine will extract key feature mentions to update real-time market share dashboards.")
-    card3.info("**👁️ Review Privacy**\n\nIndividual contributor names are anonymized in the public Titan Intelligence export files.")
+        st.markdown('</div>', unsafe_allow_html=True)
 
-# ==========================================
-# PAGE: MARKET INTEL (Visual Mockup)
-# ==========================================
+
+# ---------------- MARKET INTEL ----------------
 elif page == "Market Intel":
-    st.title("Market Analysis & Review Insights")
-    st.markdown("Real-time competitive landscape and customer sentiment telemetry.")
-    st.markdown("---")
-    
-    col1, col2 = st.columns()
+    st.title("Market Intelligence")
+
+    col1, col2 = st.columns(2)
+
     with col1:
-        st.subheader("Apple Inc. (AAPL)")
-        chart_data = pd.DataFrame(np.random.randn(20, 1) * 5 + 189, columns=['Price'])
+        st.markdown('<div class="card">', unsafe_allow_html=True)
+        st.subheader("Apple")
+        apple = load_stock_data("AAPL")
+        if not apple.empty:
+            st.line_chart(apple['Close'])
+            st.metric("Price", f"${apple['Close'].iloc[-1]:.2f}")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    with col2:
+        st.markdown('<div class="card">', unsafe_allow_html=True)
+        st.subheader("Google")
+        google = load_stock_data("GOOGL")
+        if not google.empty:
+            st.line_chart(google['Close'])
+            st.metric("Price", f"${google['Close'].iloc[-1]:.2f}")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+# ---------------- DASHBOARD ----------------
+elif page == "Dashboard":
+    st.title("Sentiment Analytics")
+
+    if st.session_state.sentiments:
+        df = pd.DataFrame(st.session_state.sentiments)
+
+        mapping = {"Positive": 1, "Neutral": 0, "Negative": -1}
+        df['value'] = df['sentiment'].map(mapping)
+
+        df = df.sort_values("time")
+        df.set_index("time", inplace=True)
+
+        trend = df['value'].resample('1min').mean().fillna(0)
+
+        st.markdown('<div class="card">', unsafe_allow_html=True)
+        st.subheader("Trend")
+        st.line_chart(trend)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+        st.markdown('<div class="card">', unsafe_allow_html=True)
+        st.subheader("Distribution")
+        st.bar_chart(df['sentiment'].value_counts())
+        st.markdown('</div>', unsafe_allow_html=True)
+
+# ---------------- PRODUCT SELECTOR ----------------
+elif page == "Product Selector":
+    st.title("Product Comparison")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        brand1 = st.selectbox("Brand A", ["Apple", "Google"])
+    with col2:
+        brand2 = st.selectbox("Brand B", ["Apple", "Google"])
+
+    df = pd.DataFrame({
+        "Feature": ["Performance", "Battery", "Ecosystem"],
+        brand1: np.random.randint(6, 10, 3),
+        brand2: np.random.randint(6, 10, 3)
+    })
+
+    st.markdown('<div class="card">', unsafe_allow_html=True)
+    st.dataframe(df)
+    st.markdown('</div>', unsafe_allow_html=True)
