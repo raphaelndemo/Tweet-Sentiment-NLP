@@ -294,7 +294,7 @@ The tweaked Logistic Regression model exhibits a more **balanced sensitivity acr
 ## Model Interpretation: Naive Bayes with TF-IDF
 
 
-![Confusion Matrix Naive Bayes](Images/confusion%20matrix-naive%20bayes.png)
+![Tweaked Naive Bayes with TF-IDF](Images/Tweaked%20version%20of%20Naive%20Bayes%20with%20TF-IDF.png)
 
 ### 1. Negative Emotion
 - **Precision:** 0.83  
