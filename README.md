@@ -323,6 +323,23 @@ The model shows moderate precision but low recall for positive sentiment, correc
 - It **misses most negative cases** despite high precision  
 - It struggles to **differentiate positive from neutral**, leading to misclassification
 
+##  Model Performance Evaluation
+
+| Model                                   | Neg F1 | Neu F1 | Pos F1 | Avg F1 |
+|----------------------------------------|--------|--------|--------|--------|
+| Logistic Regression (Baseline + TF-IDF) | 0.10   | 0.77   | 0.51   | 0.46   |
+| Naive Bayes (Baseline + TF-IDF)         | 0.05   | 0.77   | 0.42   | 0.41   |
+| Tweaked Logistic Regression + TF-IDF    | 0.41   | 0.73   | 0.59   | 0.58   |
+| Tweaked Naive Bayes + TF-IDF            | 0.08   | 0.77   | 0.47   | 0.44   |
+
+###  Key Observations
+
+- **Tweaked Logistic Regression** shows the **most balanced F1-scores** across all classes (Neg: 0.41, Neu: 0.73, Pos: 0.59).  
+- **Baseline models** have high neutral F1 but **fail on negative sentiments**.  
+- **Tweaked Naive Bayes** improves negative precision slightly but still has very low recall, leading to low F1.  
+
+>  **Conclusion:** Tuning Logistic Regression improved performance for minority classes and overall balance, making it the best choice for multi-class sentiment classification.
+
 ## Trade-Off Analysis
 
 - **Baseline Logistic Regression (TF-IDF):**  
