@@ -234,27 +234,45 @@ elif page == "Market Intel":
 # ---------------- DASHBOARD ----------------
 elif page == "Dashboard":
     st.title("Sentiment Analytics")
-
-    if st.session_state.sentiments:
-        df = pd.DataFrame(st.session_state.sentiments)
-
-        mapping = {"Positive": 1, "Neutral": 0, "Negative": -1}
-        df['value'] = df['sentiment'].map(mapping)
-
-        df = df.sort_values("time")
-        df.set_index("time", inplace=True)
-
-        trend = df['value'].resample('1min').mean().fillna(0)
-
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.subheader("Trend")
-        st.line_chart(trend)
-        st.markdown('</div>', unsafe_allow_html=True)
-
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.subheader("Distribution")
-        st.bar_chart(df['sentiment'].value_counts())
-        st.markdown('</div>', unsafe_allow_html=True)
+    
+    # PASTE YOUR GOOGLE SHEETS CSV LINK HERE
+    CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSYuty00VzwOq57wiru-aNOcYbqR2dtpUWh-oyAAGn5dOvGrMppMW-M8mGbiAfz9RA36W5faDm6v3Pz/pubhtml"
+    
+    try:
+        # 1. Instantly pull the live data from Google Sheets
+        df = pd.read_csv(CSV_URL)
+        
+        if not df.empty and 'Sentiment' in df.columns:
+            st.markdown('<div class="card">', unsafe_allow_html=True)
+            st.subheader("All-Time Sentiment Distribution")
+            
+            # Draw the bar chart
+            st.bar_chart(df['Sentiment'].value_counts())
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+            # --- PRESENTATION FLEX ---
+            # Show a live table of the 5 most recent reviews so your audience can see the database working!
+            st.markdown('<div class="card">', unsafe_allow_html=True)
+            st.subheader("Live Database Feed")
+            
+            # Clean up the table to make it look nice
+            display_df = df[['Timestamp', 'Brand', 'Sentiment', 'Review']].tail(5).copy()
+            st.dataframe(display_df, use_container_width=True, hide_index=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+        else:
+            st.info("Waiting for reviews to populate...")
+            
+    except Exception as e:
+        # If the network drops, safely fallback to the temporary session memory
+        if st.session_state.sentiments:
+            st.markdown('<div class="card">', unsafe_allow_html=True)
+            st.subheader("Current Session Sentiment")
+            backup_df = pd.DataFrame(st.session_state.sentiments)
+            st.bar_chart(backup_df['sentiment'].value_counts())
+            st.markdown('</div>', unsafe_allow_html=True)
+        else:
+            st.info("Submit a review to generate insights.")
 
 # ---------------- PRODUCT SELECTOR ----------------
 elif page == "Product Selector":
