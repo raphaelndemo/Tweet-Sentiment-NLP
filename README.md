@@ -254,30 +254,6 @@ P(C \mid x_1, x_2, ..., x_n) \propto P(C) \prod P(x_i \mid C)
 
 
 ## 3. Simple Python Example
-
-```python
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.naive_bayes import MultinomialNB
-
-# Example data
-docs = ["I love programming", "I hate bugs"]
-labels = [1, 0]
-
-# Convert text to numbers
-vectorizer = CountVectorizer()
-X = vectorizer.fit_transform(docs)
-
-# Train baseline model
-model = MultinomialNB()
-model.fit(X, labels)
-
-# Predict
-pred = model.predict(X)
-print(pred)
-
-
-
-
 ## Evaluation - Model Comparison
 
 | Model | Precision | Recall | F1-score | Accuracy | Notes |
