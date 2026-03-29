@@ -192,6 +192,8 @@ We start with a **baseline model** and gradually introduce more complex models t
 
 ### Baseline Model: Logistic Regression + TF-IDF
 
+![Confusion Matrix Logistic Regression](Images/confusion%20matrix%20logistic%20regression.png)
+
 - **Why Logistic Regression:** Simple, interpretable, and effective for text classification  
 - **Role of TF-IDF:** Assigns weights to words, emphasizing important words and improving prediction accuracy  
 - Models cannot understand raw text—they only work with numbers; TF-IDF ensures meaningful numerical representation  
