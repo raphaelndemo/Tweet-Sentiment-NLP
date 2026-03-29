@@ -192,7 +192,7 @@ We start with a **baseline model** and gradually introduce more complex models t
 
 ### Baseline Model: Logistic Regression + TF-IDF
 
-![Confusion Matrix Naive Bayes](Images/confusion%20matrix-naive%20bayes.png)
+![Confusion Matrix Logistic Regression](Images/confusion%20matrix%20logistic%20regression.png)
 
 - **Why Logistic Regression:** Simple, interpretable, and effective for text classification  
 - **Role of TF-IDF:** Assigns weights to words, emphasizing important words and improving prediction accuracy  
@@ -226,6 +226,57 @@ The model performs best on neutral sentiment. High recall indicates most neutral
 - **F1-score:** 0.51  
 
 The model performs poorly on positive sentiment. Moderate precision with low recall indicates it fails to capture over half of actual positive tweets. Many positive instances are misclassified as neutral, highlighting a bias toward the neutral class and limiting detection of positive sentiment.
+
+
+# Baseline Multinomial Naive Bayes
+
+
+
+![Confusion Matrix Naive Bayes](Images/confusion%20matrix-naive%20bayes.png)
+
+## 1. What it is
+- A **probabilistic model** for classification (often text).  
+- Assumes features (e.g., words) are **independent**.  
+- A **baseline** model uses default settings to check basic performance.
+
+
+
+## 2. How it works
+- Predicts class \(C\) based on:
+
+\[
+P(C \mid x_1, x_2, ..., x_n) \propto P(C) \prod P(x_i \mid C)
+\]
+
+- **Multinomial version** counts how often features appear in each class.  
+- Uses **Laplace smoothing** to avoid zero probabilities.
+
+
+
+## 3. Simple Python Example
+
+```python
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+
+# Example data
+docs = ["I love programming", "I hate bugs"]
+labels = [1, 0]
+
+# Convert text to numbers
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(docs)
+
+# Train baseline model
+model = MultinomialNB()
+model.fit(X, labels)
+
+# Predict
+pred = model.predict(X)
+print(pred)
+
+
+
 
 ## Evaluation - Model Comparison
 
