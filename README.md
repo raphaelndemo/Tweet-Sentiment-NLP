@@ -244,6 +244,9 @@ The model performs poorly on positive sentiment. Moderate precision with low rec
 
 ##  Tweaked Logistic Regression — Performance Analysis
 
+
+![Tweaked Regression Model - Improved Logistic Regression](Images/tweaked_regression_model-improved_logistic_regression.png)
+
 ###  Negative Emotion
 - **Precision:** 0.33  
 - **Recall:** 0.54  
