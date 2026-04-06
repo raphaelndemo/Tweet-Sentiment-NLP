@@ -1,3 +1,12 @@
+---
+title: Titan Review Software
+emoji: 🚀
+colorFrom: blue
+colorTo: red
+sdk: streamlit
+app_file: app.py
+pinned: false
+---
 
 ![Tweeter](Images/Tweeter%20Image.png)
 
