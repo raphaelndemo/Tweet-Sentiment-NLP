@@ -3,7 +3,6 @@ name: Sync to Hugging Face hub
 on:
   push:
     branches: [main]
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
@@ -16,9 +15,22 @@ jobs:
           fetch-depth: 0
           lfs: true
 
+      - name: Strip Non-Essential Binaries
+        run: |
+          # Delete the files Hugging Face is complaining about
+          rm -rf Images/
+          rm -f *.pdf
+          
+          # Tell Git who is making these temporary changes
+          git config --global user.email "bot@github.com"
+          git config --global user.name "Workflow Bot"
+          
+          # Commit the deletions locally (this does NOT affect your main GitHub repo)
+          git add .
+          git commit -m "Clean build for Hugging Face"
+
       - name: Push to hub
         env:
-          # This uses the secret you named 'HF'
           HF_SECRET: ${{ secrets.HF }}
         run: |
           git push --force https://x-token:$HF_SECRET@huggingface.co/spaces/Silvester01/Titan-review-software main
