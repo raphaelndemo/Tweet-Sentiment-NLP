@@ -13,24 +13,30 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          lfs: true
 
-      - name: Strip Non-Essential Binaries
+      - name: Build Clean Production Bundle
         run: |
-          # Delete the files Hugging Face is complaining about
+          # 1. Delete the files Hugging Face hates
           rm -rf Images/
           rm -f *.pdf
           
-          # Tell Git who is making these temporary changes
+          # 2. THE SECRET MOVE: Delete the old Git history entirely
+          # This makes the VM "forget" those PDFs ever existed
+          rm -rf .git
+          
+          # 3. Start a brand new, clean Git history
+          git init
           git config --global user.email "bot@github.com"
           git config --global user.name "Workflow Bot"
           
-          # Commit the deletions locally (this does NOT affect your main GitHub repo)
+          # 4. Add only the clean files and commit them
           git add .
-          git commit -m "Clean build for Hugging Face"
+          git commit -m "Production-ready build"
+          git branch -M main
 
       - name: Push to hub
         env:
           HF_SECRET: ${{ secrets.HF }}
         run: |
+          # 5. Force push this "clean slate" to Hugging Face
           git push --force https://x-token:$HF_SECRET@huggingface.co/spaces/Silvester01/Titan-review-software main
