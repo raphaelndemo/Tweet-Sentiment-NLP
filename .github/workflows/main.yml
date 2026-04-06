@@ -14,5 +14,5 @@ jobs:
           lfs: true
       - name: Push to hub
         env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push --force https://x-token:$HF_TOKEN@huggingface.co/spaces/Silvester01/Titan-review-software
+          HF_TOKEN: ${{ secrets.HF }}
+        run: git push --force https://x-token:$HF@huggingface.co/spaces/Silvester01/Titan-review-software
