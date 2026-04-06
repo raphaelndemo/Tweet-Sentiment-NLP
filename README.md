@@ -404,4 +404,4 @@ Deploying this model will deliver the highest value to **Titan Electronic** by e
 
 END.
 ## Dashboard link
-https://silvester01-titan-review -software.hf.space
+https://silvester01-titan-review-software.hf.space
